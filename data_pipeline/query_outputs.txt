@@ -1,0 +1,100 @@
+======================================================================
+MODULE 1: SQL QUERIES AND SAVED OUTPUTS
+======================================================================
+
+--- Query 1 [SELECT, WHERE, LIMIT]: Books priced under 3000 INR ---
+SQL Query:
+SELECT title, price_inr, rating FROM books WHERE price_inr < 3000.0 LIMIT 5;
+
+Execution Output:
+                                                                                            title  price_inr  rating
+The Road to Little Dribbling: Adventures of an American in Britain (Notes From a Small Island #2)    2448.66       1
+                                                               1,000 Places to See Before You Die    2751.44       5
+                                                                             In a Dark, Dark Wood    2070.96       1
+                                                                                 A Murder in Time    1755.52       1
+                                                           That Darkness (Gardiner and Renner #1)    1468.56       1
+
+--------------------------------------------------
+
+--- Query 2 [ORDER BY, LIMIT]: Top 5 most expensive books in GBP ---
+SQL Query:
+SELECT title, price_gbp, price_inr FROM books ORDER BY price_gbp DESC LIMIT 5;
+
+Execution Output:
+                                                                 title  price_gbp  price_inr
+                                         Boar Island (Anna Pigeon #19)      59.48    6275.14
+The No. 1 Ladies' Detective Agency (No. 1 Ladies' Detective Agency #1)      57.70    6087.35
+                                      A Year in Provence (Provence #1)      56.88    6000.84
+                                                   The Past Never Ends      56.50    5960.75
+                                      The Last Painting of Sara de Vos      55.55    5860.52
+
+--------------------------------------------------
+
+--- Query 3 [DISTINCT]: Unique star ratings present in database ---
+SQL Query:
+SELECT DISTINCT rating FROM books ORDER BY rating ASC;
+
+Execution Output:
+ rating
+      1
+      2
+      3
+      4
+      5
+
+--------------------------------------------------
+
+--- Query 4 [BETWEEN, AND]: In-stock books with rating between 4 and 5 ---
+SQL Query:
+SELECT title, rating, price_inr FROM books WHERE rating BETWEEN 4 AND 5 AND in_stock = 1 LIMIT 5;
+
+Execution Output:
+                                                             title  rating  price_inr
+Full Moon over Noahâs Ark: An Odyssey to Mount Ararat and Beyond       4    5214.86
+                                  A Year in Provence (Provence #1)       4    6000.84
+                                1,000 Places to See Before You Die       5    2751.44
+                                                     Sharp Objects       4    5045.01
+                                               The Past Never Ends       4    5960.75
+
+--------------------------------------------------
+
+--- Query 5 [INNER JOIN, ORDER BY]: Top 10 highest-rated books with category details ---
+SQL Query:
+SELECT b.book_id, b.title, c.category_name, b.price_gbp, b.price_inr, b.rating 
+            FROM books b 
+            JOIN categories c ON b.category_id = c.category_id 
+            ORDER BY b.rating DESC, b.price_gbp ASC 
+            LIMIT 10;
+
+Execution Output:
+ book_id                                                             title      category_name  price_gbp  price_inr  rating
+      40                                                 The Girl You Lost            Mystery      12.29    1296.59       5
+      69                 A Spy's Devotion (The Regency Spies of London #1) Historical Fiction      16.97    1790.33       5
+      64                                            Between Shades of Gray Historical Fiction      20.79    2193.34       5
+      59                                            Voyager (Outlander #3) Historical Fiction      21.07    2222.89       5
+      34                                 The Silkworm (Cormoran Strike #2)            Mystery      23.05    2431.78       5
+      29 What Happened on Beale Street (Secrets of the South Mysteries #2)            Mystery      25.37    2676.54       5
+      11                                1,000 Places to See Before You Die             Travel      26.08    2751.44       5
+      57                                             The Passion of Dolssa Historical Fiction      28.32    2987.76       5
+      48                                                      Mrs. Houdini Historical Fiction      30.25    3191.38       5
+      60                                                      The Red Tent Historical Fiction      35.66    3762.13       5
+
+--------------------------------------------------
+
+======================================================================
+SIDE-BY-SIDE EQUIVALENCE: SQL JOIN vs PANDAS MERGE
+======================================================================
+
+                                                        SQL_title  SQL_category_name  SQL_price_inr  SQL_rating                                                      PANDAS_title PANDAS_category_name  PANDAS_price_inr  PANDAS_rating
+                                                The Girl You Lost            Mystery        1296.59           5                                                 The Girl You Lost              Mystery           1296.59              5
+                A Spy's Devotion (The Regency Spies of London #1) Historical Fiction        1790.33           5                 A Spy's Devotion (The Regency Spies of London #1)   Historical Fiction           1790.33              5
+                                           Between Shades of Gray Historical Fiction        2193.34           5                                            Between Shades of Gray   Historical Fiction           2193.34              5
+                                           Voyager (Outlander #3) Historical Fiction        2222.89           5                                            Voyager (Outlander #3)   Historical Fiction           2222.89              5
+                                The Silkworm (Cormoran Strike #2)            Mystery        2431.78           5                                 The Silkworm (Cormoran Strike #2)              Mystery           2431.78              5
+What Happened on Beale Street (Secrets of the South Mysteries #2)            Mystery        2676.54           5 What Happened on Beale Street (Secrets of the South Mysteries #2)              Mystery           2676.54              5
+                               1,000 Places to See Before You Die             Travel        2751.44           5                                1,000 Places to See Before You Die               Travel           2751.44              5
+                                            The Passion of Dolssa Historical Fiction        2987.76           5                                             The Passion of Dolssa   Historical Fiction           2987.76              5
+                                                     Mrs. Houdini Historical Fiction        3191.38           5                                                      Mrs. Houdini   Historical Fiction           3191.38              5
+                                                     The Red Tent Historical Fiction        3762.13           5                                                      The Red Tent   Historical Fiction           3762.13              5
+
+Exact Data Match Confirmed: True
